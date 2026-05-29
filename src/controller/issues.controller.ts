@@ -1,19 +1,9 @@
 import { Request, Response } from "express";
-import { pool } from "../utilities/config.ts";
-import { IIssues } from "../types/issues.interface.ts";
+import { issuesService } from "../service/issues.service.ts";
 
 const createIssue = async (req: Request, res: Response) => {
   try {
-    const { title, description, type } = req.body;
-
-    const result = await pool.query<IIssues>(
-      `
-      INSERT INTO issues (title, description, type)
-      VALUES ($1, $2, $3)
-      RETURNING *
-      `,
-      [title, description, type],
-    );
+    const result = await issuesService.createIssueIntoDB(req.body);
 
     res.status(201).json({
       message: "Issue created successfully",
@@ -32,20 +22,10 @@ const createIssue = async (req: Request, res: Response) => {
 
 const getAllIssues = async (req: Request, res: Response) => {
   try {
-    const { sort } = req.query;
-
-    let query = `SELECT * FROM issues`;
-
-    if (sort === "newest") {
-      query += ` ORDER BY created_at DESC`;
-    } else if (sort === "oldest") {
-      query += ` ORDER BY created_at ASC`;
-    }
-
-    const allIssues = await pool.query<IIssues>(query);
+    const allIssues = await issuesService.getAllIssues(req.query);
 
     res.status(200).json({
-      message: "All Issues retrieved successfully",
+      message: "All Issues are retrieved successfully",
       success: true,
       data: allIssues.rows,
     });
@@ -61,21 +41,10 @@ const getAllIssues = async (req: Request, res: Response) => {
 
 const getSingleIssue = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-
-    let query = `SELECT * FROM issues WHERE id = $1`;
-
-    const result = await pool.query<IIssues>(query, [id]);
-
-    if (result.rows.length <= 0) {
-      return res.status(404).json({
-        success: false,
-        message: `Issue with id ${id} not found`,
-      });
-    }
+    const result = await issuesService.getSingleIssue(req.params);
 
     res.status(200).json({
-      message: `Issues with id ${id} retrieved successfully`,
+      message: `Issues with id ${req.params.id} retrieved successfully`,
       success: true,
       data: result.rows,
     });
@@ -91,22 +60,12 @@ const getSingleIssue = async (req: Request, res: Response) => {
 
 const deleteSingleIssue = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const result = await issuesService.deleteSingleIssue(req.params);
 
-    let query = `DELETE FROM issues WHERE id = $1`;
-
-    const result = await pool.query(query, [id]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        success: false,
-        message: `Issue with id ${id} not found`,
-      });
-    }
-
-    res.status(200).json({
+    res.status(204).json({
       success: true,
       message: "Issue deleted successfully",
+      data: result.rows[0],
     });
   } catch (error) {
     console.error(error);
