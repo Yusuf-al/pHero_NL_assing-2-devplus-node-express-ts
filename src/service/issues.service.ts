@@ -15,31 +15,65 @@ const createIssueIntoDB = async (payload: IIssues) => {
   return result;
 };
 
-const getAllIssues = async (payload: any) => {
+const getAllIssues = async (payload: {
+  sort?: string;
+  type?: string;
+  status?: string;
+}) => {
   const { sort, type, status } = payload;
-  console.log(payload);
 
-  let query = `SELECT * FROM issues JOIN users on issues.reporter_id = users.id`;
+  let query = `
+    SELECT 
+      issues.id, issues.title, issues.description, issues.type, issues.status,
+      issues.reporter_id, issues.created_at, issues.updated_at,
+      users.name, users.role
+    FROM issues 
+    JOIN users ON issues.reporter_id = users.id
+  `;
 
-  //   if (sort === "newest") {
-  //     query += ` ORDER BY created_at DESC`;
-  //   } else if (sort === "oldest") {
-  //     query += ` ORDER BY created_at ASC`;
-  //   } else if (type === "bug") {
-  //     query += `SELECT * FROM issues WHERE type = bug`;
-  //   } else if (type === "feature_request") {
-  //     query += `SELECT * FROM issues WHERE type = feature_request`;
-  //   } else if (status === "open") {
-  //     query += `SELECT * FROM issues WHERE status = open`;
-  //   } else if (status === "in_progress") {
-  //     query += `SELECT * FROM issues WHERE status = in_progress`;
-  //   } else if (status === "resolved") {
-  //     query += `SELECT * FROM issues WHERE status = resolved`;
-  //   }
+  const conditions: string[] = [];
+  const params: string[] = [];
 
-  const allIssues = await pool.query(query);
-  console.log(allIssues.rows[0]);
-  return allIssues;
+  if (type) {
+    params.push(type);
+    conditions.push(`issues.type = $${params.length}`);
+  }
+
+  if (status) {
+    params.push(status);
+    conditions.push(`issues.status = $${params.length}`);
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ` + conditions.join(" AND ");
+  }
+
+  if (sort === "newest") {
+    query += ` ORDER BY issues.created_at DESC`;
+  } else if (sort === "oldest") {
+    query += ` ORDER BY issues.created_at ASC`;
+  }
+
+  const { rows } = await pool.query(query, params);
+
+  if (!rows.length) return [];
+
+  const formattedResult = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    type: row.type,
+    status: row.status,
+    reporter: {
+      id: row.reporter_id,
+      name: row.name,
+      role: row.role,
+    },
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  }));
+
+  return formattedResult;
 };
 
 const getSingleIssue = async (payload: any) => {

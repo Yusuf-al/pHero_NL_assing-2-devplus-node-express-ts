@@ -57,13 +57,12 @@ const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
 
 const getAllIssues = async (req: Request, res: Response) => {
   try {
-    console.log(req.user);
     const allIssues = await issuesService.getAllIssues(req.query);
 
     res.status(200).json({
       message: "All Issues are retrieved successfully",
       success: true,
-      data: allIssues.rows,
+      data: allIssues,
     });
   } catch (error) {
     console.error(error);

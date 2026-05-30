@@ -7,6 +7,6 @@ const issueRoute = express.Router();
 issueRoute.post("/", auth(), issueController.createIssue);
 issueRoute.get("/", auth(), issueController.getAllIssues);
 issueRoute.get("/:id", auth(), issueController.getSingleIssue);
-issueRoute.delete("/:id", issueController.deleteSingleIssue);
+issueRoute.delete("/:id", auth(), issueController.deleteSingleIssue);
 
 export default issueRoute;

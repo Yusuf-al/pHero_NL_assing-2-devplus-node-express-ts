@@ -39,7 +39,7 @@ const userLogin = async (payload: Ilogin) => {
     expiresIn: "1d",
   });
 
-  return { accessToken };
+  return { jwtPayload, accessToken };
 };
 export const userService = {
   createUserintoDB,

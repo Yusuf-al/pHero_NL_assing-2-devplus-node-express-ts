@@ -23,11 +23,16 @@ const createUser = async (req: Request, res: Response) => {
 
 const loginUser = async (req: Request, res: Response) => {
   try {
-    const result = await userService.userLogin(req.body);
-    res.status(201).json({
-      message: "Login Successful",
+    const { accessToken, jwtPayload } = await userService.userLogin(req.body);
+    res.status(200).json({
       success: true,
-      data: result,
+      message: "Login Successful",
+      data: {
+        token: accessToken,
+        user: {
+          ...jwtPayload,
+        },
+      },
     });
   } catch (error) {
     console.error(error);
