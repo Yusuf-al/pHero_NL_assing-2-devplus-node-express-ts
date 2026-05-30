@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { issuesService } from "../service/issues.service.ts";
 import { IIssues } from "../types/issues.interface.ts";
+import { JwtPayload } from "jsonwebtoken";
 
 const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
   try {
@@ -112,9 +113,33 @@ const deleteSingleIssue = async (req: Request, res: Response) => {
   }
 };
 
+const updateIssue = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const id = req.params.id;
+    const body = req.body;
+
+    const result = await issuesService.updateIssue({ id, user, body });
+
+    res.status(200).json({
+      success: true,
+      message: "Issue Updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: `Failed to update issue with id ${req.params.id} `,
+    });
+  }
+};
+
 export const issueController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
   deleteSingleIssue,
+  updateIssue,
 };

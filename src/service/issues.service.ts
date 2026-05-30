@@ -104,9 +104,67 @@ const deleteSingleIssue = async (payload: any) => {
   return result;
 };
 
+const updateIssue = async (payload: any) => {
+  const { id: issue_id, user, body } = payload;
+  const { title, description, status, type } = body;
+
+  const selectQuery = `
+    SELECT 
+      issues.id,
+      issues.reporter_id, 
+      users.role
+    FROM issues 
+    JOIN users ON issues.reporter_id = users.id
+    WHERE issues.id = $1
+  `;
+
+  const { rows } = await pool.query<IIssues>(selectQuery, [issue_id]);
+
+  if (!rows.length) {
+    throw new Error("Issue not found");
+  }
+
+  const issue = rows[0];
+  console.log(user);
+  console.log(issue);
+
+  const isMaintainerOwner =
+    user.role === "maintainer" && issue.reporter_id === user.id;
+  const isContributor = user.role === "contributor";
+
+  if (!isMaintainerOwner && !isContributor) {
+    throw new Error(
+      "Unauthorized: You do not have permission to update this issue",
+    );
+  }
+
+  const updateQuery = `
+    UPDATE issues
+    SET
+      title = COALESCE($1, title),
+      description = COALESCE($2, description),
+      type = COALESCE($3, type),
+      status = COALESCE($4, status),
+      updated_at = NOW()
+    WHERE id = $5
+    RETURNING *;
+  `;
+
+  const { rows: updatedRows } = await pool.query<IIssues>(updateQuery, [
+    title,
+    description,
+    type,
+    status,
+    issue_id,
+  ]);
+
+  return updatedRows[0];
+};
+
 export const issuesService = {
   createIssueIntoDB,
   getAllIssues,
   getSingleIssue,
   deleteSingleIssue,
+  updateIssue,
 };

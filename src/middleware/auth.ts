@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { pool } from "../utilities/config.ts";
 import loginUser from "../utilities/getLoginUser.ts";
 
-const auth = () => {
+const auth = (...roles: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
@@ -25,6 +25,13 @@ const auth = () => {
       req.user = userData;
 
       delete userData.password;
+
+      if (roles.length && !roles.includes(userData.role)) {
+        return res.status(403).json({
+          success: false,
+          message: "Request forbidden ",
+        });
+      }
 
       next();
     } catch (error) {
