@@ -79,15 +79,38 @@ const getAllIssues = async (payload: {
 const getSingleIssue = async (payload: any) => {
   const { id } = payload;
 
-  let query = `SELECT * FROM issues WHERE id = $1`;
+  let query = `
+    SELECT 
+      issues.id, issues.title, issues.description, issues.type, issues.status,
+      issues.reporter_id, issues.created_at, issues.updated_at,
+      users.name, users.role
+    FROM issues 
+    JOIN users ON issues.reporter_id = users.id
+    WHERE issues.id = $1
+  `;
 
-  const result = await pool.query<IIssues>(query, [id]);
+  const { rows } = await pool.query(query, [id]);
 
-  if (result.rows.length <= 0) {
+  if (rows.length <= 0) {
     throw new Error(`Issue with id ${id} not found`);
   }
+  const issue = rows[0];
+  const formattedIssue = {
+    id: issue?.id,
+    title: issue?.title,
+    description: issue?.description,
+    type: issue?.type,
+    status: issue?.status,
+    reporter: {
+      id: issue?.reporter_id,
+      name: issue?.name,
+      role: issue?.role,
+    },
+    created_at: issue?.created_at,
+    updated_at: issue?.updated_at,
+  };
 
-  return result;
+  return formattedIssue;
 };
 
 const deleteSingleIssue = async (payload: any) => {

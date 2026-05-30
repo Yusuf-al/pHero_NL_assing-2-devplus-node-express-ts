@@ -8,6 +8,16 @@ import loginUser from "../utilities/getLoginUser.ts";
 const createUserintoDB = async (payload: IUser) => {
   const { name, password, role, email } = payload;
 
+  if (!name || !password || !role || !email) {
+    throw new Error("All fields are required");
+  }
+
+  const allowedRoles = ["contributor", "maintainer"];
+
+  if (!allowedRoles.includes(role)) {
+    throw new Error("Role should be between contributor or maintainer");
+  }
+
   const hashPass = await bcrypt.hash(password, 10);
   const result = await pool.query(
     `

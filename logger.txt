@@ -878,3 +878,36 @@ IP        : ::1
 Success   : true
 Agent     : PostmanRuntime/7.53.0
 ----------------------------------------
+----------------------------------------  
+[30/5/2026, 10:11:27 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 71ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[30/5/2026, 10:11:46 pm]
+Status    : SUCCESS
+Method    : GET
+Route     : /api/issues/6
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[30/5/2026, 10:14:01 pm]
+Status    : SUCCESS
+Method    : GET
+Route     : /api/issues/6
+Code      : 200
+Duration  : 39ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
