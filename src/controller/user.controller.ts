@@ -1,7 +1,4 @@
 import { Request, Response } from "express";
-import { pool } from "../utilities/config.ts";
-import bcrypt from "bcrypt";
-import { IUser } from "../types/user.interface.ts";
 import { userService } from "../service/user.service.ts";
 
 const createUser = async (req: Request, res: Response) => {

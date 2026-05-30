@@ -1,7 +1,8 @@
 import app from "./app.ts";
-import { initDB } from "./utilities/config.ts";
+import { initDB } from "./db/db.ts";
+import { config } from "./utilities/config.ts";
 
-const PORT = process.env.PORT || 2525;
+const PORT = config.port || 2525;
 
 const main = () => {
   initDB();

@@ -1,9 +1,10 @@
 import { IUser } from "../types/user.interface.ts";
 import bcrypt from "bcrypt";
-import { pool } from "../utilities/config.ts";
+import { pool } from "./../db/db.ts";
 import { Ilogin } from "../types/login.interface.ts";
 import jwt from "jsonwebtoken";
 import loginUser from "../utilities/getLoginUser.ts";
+import { config } from "../utilities/config.ts";
 
 const createUserintoDB = async (payload: IUser) => {
   const { name, password, role, email } = payload;
@@ -45,7 +46,7 @@ const userLogin = async (payload: Ilogin) => {
     email: userData.email,
     role: userData.role,
   };
-  const accessToken = jwt.sign(jwtPayload, "sdfie32r5smf-3msdf", {
+  const accessToken = jwt.sign(jwtPayload, config.secret, {
     expiresIn: "1d",
   });
 

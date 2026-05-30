@@ -5,17 +5,13 @@ import auth from "../middleware/auth.ts";
 const issueRoute = express.Router();
 
 issueRoute.post("/", auth(), issueController.createIssue);
-issueRoute.get(
-  "/",
-  auth("contributor", "maintainer"),
-  issueController.getAllIssues,
-);
+issueRoute.get("/", auth(), issueController.getAllIssues);
 issueRoute.get("/:id", auth(), issueController.getSingleIssue);
-issueRoute.put(
+issueRoute.put("/:id", auth(), issueController.updateIssue);
+issueRoute.delete(
   "/:id",
-  auth("contributor", "maintainer"),
-  issueController.updateIssue,
+  auth("maintainer"),
+  issueController.deleteSingleIssue,
 );
-issueRoute.delete("/:id", auth(), issueController.deleteSingleIssue);
 
 export default issueRoute;

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { pool } from "../utilities/config.ts";
 import loginUser from "../utilities/getLoginUser.ts";
+import { config } from "../utilities/config.ts";
 
 const auth = (...roles: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -15,9 +15,9 @@ const auth = (...roles: any) => {
         });
       }
 
-      const { name, email, role } = jwt.verify(
+      const { email } = jwt.verify(
         token as string,
-        "sdfie32r5smf-3msdf",
+        config.secret,
       ) as JwtPayload;
 
       const userData = await loginUser(email);

@@ -98,10 +98,10 @@ const deleteSingleIssue = async (req: Request, res: Response) => {
   try {
     const result = await issuesService.deleteSingleIssue(req.params);
 
-    res.status(204).json({
+    res.status(200).json({
       success: true,
       message: "Issue deleted successfully",
-      data: result.rows[0],
+      data: result,
     });
   } catch (error) {
     console.error(error);

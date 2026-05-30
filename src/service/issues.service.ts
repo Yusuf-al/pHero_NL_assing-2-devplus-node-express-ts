@@ -1,5 +1,5 @@
+import { pool } from "../db/db.ts";
 import { IIssues } from "../types/issues.interface.ts";
-import { pool } from "../utilities/config.ts";
 
 const createIssueIntoDB = async (payload: IIssues) => {
   const { title, description, type, reporter_id, status } = payload;
@@ -118,13 +118,13 @@ const deleteSingleIssue = async (payload: any) => {
 
   let query = `DELETE FROM issues WHERE id = $1`;
 
-  const result = await pool.query(query, [id]);
+  const { rows } = await pool.query(query, [id]);
 
-  if (result.rows.length <= 0) {
-    throw new Error(`Issue with id ${id} not found`);
+  if (rows.length > 0) {
+    return "Issue is not deleted yet";
   }
 
-  return result;
+  return;
 };
 
 const updateIssue = async (payload: any) => {
@@ -148,8 +148,6 @@ const updateIssue = async (payload: any) => {
   }
 
   const issue = rows[0];
-  console.log(user);
-  console.log(issue);
 
   const isMaintainerOwner =
     user.role === "maintainer" && issue.reporter_id === user.id;
