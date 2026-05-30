@@ -1,9 +1,45 @@
 import { Request, Response } from "express";
 import { issuesService } from "../service/issues.service.ts";
+import { IIssues } from "../types/issues.interface.ts";
 
-const createIssue = async (req: Request, res: Response) => {
+const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
   try {
-    const result = await issuesService.createIssueIntoDB(req.body);
+    const { title, description, type, status } = req.body;
+
+    if (!title || !description || !type) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are requried",
+      });
+    }
+
+    const allowedTypes = ["bug", "feature_request"];
+
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid type",
+      });
+    }
+
+    const allowedStatus = ["open", "in_progress", "resolved"];
+
+    if (status && !allowedStatus.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
+    }
+
+    const issue = {
+      title,
+      description,
+      type,
+      status: status || "open",
+      reporter_id: req.user?.id,
+    };
+
+    const result = await issuesService.createIssueIntoDB(issue);
 
     res.status(201).json({
       message: "Issue created successfully",
@@ -12,7 +48,6 @@ const createIssue = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       success: false,
       message: "Failed to create issue",
@@ -22,6 +57,7 @@ const createIssue = async (req: Request, res: Response) => {
 
 const getAllIssues = async (req: Request, res: Response) => {
   try {
+    console.log(req.user);
     const allIssues = await issuesService.getAllIssues(req.query);
 
     res.status(200).json({

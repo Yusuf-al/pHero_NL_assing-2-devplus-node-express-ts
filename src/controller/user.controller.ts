@@ -27,11 +27,7 @@ const loginUser = async (req: Request, res: Response) => {
     res.status(201).json({
       message: "Login Successful",
       success: true,
-      data: {
-        name: result.rows[0].name,
-        email: result.rows[0].email,
-        role: result.rows[0].role,
-      },
+      data: result,
     });
   } catch (error) {
     console.error(error);

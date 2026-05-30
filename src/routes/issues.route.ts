@@ -1,11 +1,12 @@
 import express from "express";
 import { issueController } from "../controller/issues.controller.ts";
+import auth from "../middleware/auth.ts";
 
 const issueRoute = express.Router();
 
-issueRoute.post("/", issueController.createIssue);
-issueRoute.get("/", issueController.getAllIssues);
-issueRoute.get("/:id", issueController.getSingleIssue);
+issueRoute.post("/", auth(), issueController.createIssue);
+issueRoute.get("/", auth(), issueController.getAllIssues);
+issueRoute.get("/:id", auth(), issueController.getSingleIssue);
 issueRoute.delete("/:id", issueController.deleteSingleIssue);
 
 export default issueRoute;
