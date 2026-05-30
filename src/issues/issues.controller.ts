@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { issuesService } from "../service/issues.service.ts";
-import { IIssues } from "../types/issues.interface.ts";
+import { issuesService } from "./issues.service.ts";
+import { IIssues } from "./issues.interface.ts";
 import { JwtPayload } from "jsonwebtoken";
 
 const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {

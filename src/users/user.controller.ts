@@ -1,19 +1,24 @@
 import { Request, Response } from "express";
-import { userService } from "../service/user.service.ts";
+import { userService } from "./user.service.ts";
+import sendResponse from "../utilities/sendResponse.ts";
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const result = await userService.createUserintoDB(req.body);
-    res.status(201).json({
+
+    sendResponse(res, {
+      statusCode: 201,
       message: "User Created",
       success: true,
       data: result.rows[0],
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
-      message: `Failed to create user `,
+      message: "Failed to create user",
+      error: error,
     });
   }
 };

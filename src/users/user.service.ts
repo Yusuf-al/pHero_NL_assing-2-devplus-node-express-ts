@@ -1,6 +1,6 @@
-import { IUser } from "../types/user.interface.ts";
+import { IUser } from "./user.interface.ts";
 import bcrypt from "bcrypt";
-import { pool } from "./../db/db.ts";
+import { pool } from "../db/db.ts";
 import { Ilogin } from "../types/login.interface.ts";
 import jwt from "jsonwebtoken";
 import loginUser from "../utilities/getLoginUser.ts";

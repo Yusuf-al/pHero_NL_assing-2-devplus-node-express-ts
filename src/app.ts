@@ -1,25 +1,18 @@
-import express, { Request, Response } from "express";
-import contributorRoute from "./routes/contributor.route.ts";
-import maintainerRoute from "./routes/maintainer.route.ts";
-import issueRoute from "./routes/issues.route.ts";
-import userRouter from "./routes/user.route.ts";
-import logger from "./middleware/logger.ts";
+import express, { Application, NextFunction, Request, Response } from "express";
 
-const app = express();
+import issueRoute from "./issues/issues.route.ts";
+import userRouter from "./users/user.route.ts";
+import logger from "./middleware/logger.ts";
+import globalErrorHandler from "./middleware/globalErrorHandler.ts";
+
+const app: Application = express();
 
 app.use(express.json());
 app.use(logger);
 
-app.get("/", (req: Request, res: Response) => {
-  res.json({
-    success: true,
-    message: "Node + Express + TypeScript server is running!",
-  });
-});
-
 app.use("/api/auth/", userRouter);
 app.use("/api/issues", issueRoute);
-app.use("/api/v1/contributor", contributorRoute);
-app.use("/api/v1/maintainer", maintainerRoute);
+
+app.use(globalErrorHandler);
 
 export default app;

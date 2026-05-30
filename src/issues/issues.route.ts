@@ -1,5 +1,5 @@
 import express from "express";
-import { issueController } from "../controller/issues.controller.ts";
+import { issueController } from "./issues.controller.ts";
 import auth from "../middleware/auth.ts";
 
 const issueRoute = express.Router();
