@@ -5,7 +5,7 @@ import auth from "../middleware/auth.ts";
 const issueRoute = express.Router();
 
 issueRoute.post("/", auth(), issueController.createIssue);
-issueRoute.get("/", auth(), issueController.getAllIssues);
+issueRoute.get("/", issueController.getAllIssues);
 issueRoute.get("/:id", auth(), issueController.getSingleIssue);
 issueRoute.put("/:id", auth(), issueController.updateIssue);
 issueRoute.delete(

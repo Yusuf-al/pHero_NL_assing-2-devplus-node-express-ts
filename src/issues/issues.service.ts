@@ -15,86 +15,32 @@ const createIssueIntoDB = async (payload: IIssues) => {
   return result;
 };
 
-const getAllIssues = async (payload: {
-  sort?: string;
-  type?: string;
-  status?: string;
-}) => {
-  const { sort, type, status } = payload;
-
-  let query = `
-    SELECT 
-      issues.id, issues.title, issues.description, issues.type, issues.status,
-      issues.reporter_id, issues.created_at, issues.updated_at,
-      users.name, users.role
-    FROM issues 
-    JOIN users ON issues.reporter_id = users.id
-  `;
-
-  const conditions: string[] = [];
-  const params: string[] = [];
-
-  if (type) {
-    params.push(type);
-    conditions.push(`issues.type = $${params.length}`);
-  }
-
-  if (status) {
-    params.push(status);
-    conditions.push(`issues.status = $${params.length}`);
-  }
-
-  if (conditions.length > 0) {
-    query += ` WHERE ` + conditions.join(" AND ");
-  }
-
-  if (sort === "newest") {
-    query += ` ORDER BY issues.created_at DESC`;
-  } else if (sort === "oldest") {
-    query += ` ORDER BY issues.created_at ASC`;
-  }
-
-  const { rows } = await pool.query(query, params);
-
-  if (!rows.length) return [];
-
-  const formattedResult = rows.map((row) => ({
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    type: row.type,
-    status: row.status,
-    reporter: {
-      id: row.reporter_id,
-      name: row.name,
-      role: row.role,
-    },
-    created_at: row.created_at,
-    updated_at: row.updated_at,
-  }));
-
-  return formattedResult;
-};
-
 const getSingleIssue = async (payload: any) => {
   const { id } = payload;
 
   let query = `
     SELECT 
-      issues.id, issues.title, issues.description, issues.type, issues.status,
-      issues.reporter_id, issues.created_at, issues.updated_at,
-      users.name, users.role
+      *
     FROM issues 
-    JOIN users ON issues.reporter_id = users.id
-    WHERE issues.id = $1
+    WHERE id = $1
+  `;
+  let userQuery = `
+    SELECT 
+      *
+    FROM users 
+    WHERE id = $1
   `;
 
   const { rows } = await pool.query(query, [id]);
+  const issue = rows[0];
+
+  const { rows: userData } = await pool.query(userQuery, [issue.reporter_id]);
+  const user = userData[0];
 
   if (rows.length <= 0) {
     throw new Error(`Issue with id ${id} not found`);
   }
-  const issue = rows[0];
+
   const formattedIssue = {
     id: issue?.id,
     title: issue?.title,
@@ -103,8 +49,8 @@ const getSingleIssue = async (payload: any) => {
     status: issue?.status,
     reporter: {
       id: issue?.reporter_id,
-      name: issue?.name,
-      role: issue?.role,
+      name: user?.name,
+      role: user?.role,
     },
     created_at: issue?.created_at,
     updated_at: issue?.updated_at,
@@ -180,6 +126,73 @@ const updateIssue = async (payload: any) => {
   ]);
 
   return updatedRows[0];
+};
+
+const getAllIssues = async (payload: {
+  sort?: string;
+  type?: string;
+  status?: string;
+}) => {
+  const { sort, type, status } = payload;
+
+  let query = `
+    SELECT 
+     *
+    FROM issues 
+  `;
+
+  const conditions: string[] = [];
+  const params: string[] = [];
+
+  if (type) {
+    params.push(type);
+    conditions.push(`issues.type = $${params.length}`);
+  }
+
+  if (status) {
+    params.push(status);
+    conditions.push(`issues.status = $${params.length}`);
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ` + conditions.join(" AND ");
+  }
+
+  if (sort === "newest") {
+    query += ` ORDER BY issues.created_at DESC`;
+  } else if (sort === "oldest") {
+    query += ` ORDER BY issues.created_at ASC`;
+  }
+
+  const { rows } = await pool.query(query, params);
+  if (!rows.length) return [];
+
+  const issues = rows;
+
+  const reporterIds = [...new Set(issues.map((issue) => issue.reporter_id))];
+
+  const usersResult = await pool.query(
+    `
+  SELECT id, name, role
+  FROM users
+  WHERE id = ANY($1)
+  `,
+    [reporterIds],
+  );
+
+  const usersMap = new Map(usersResult.rows.map((user) => [user.id, user]));
+  const formattedIssues = issues.map((issue) => ({
+    id: issue.id,
+    title: issue.title,
+    description: issue.description,
+    type: issue.type,
+    status: issue.status,
+    reporter: usersMap.get(issue.reporter_id),
+    created_at: issue.created_at,
+    updated_at: issue.updated_at,
+  }));
+
+  return formattedIssues;
 };
 
 export const issuesService = {

@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { issuesService } from "./issues.service.ts";
 import { IIssues } from "./issues.interface.ts";
-import { JwtPayload } from "jsonwebtoken";
+import sendResponse from "../utilities/sendResponse.ts";
 
 const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
   try {
     const { title, description, type, status } = req.body;
 
     if (!title || !description || !type) {
-      return res.status(400).json({
+      return sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "All fields are requried",
       });
@@ -17,7 +18,8 @@ const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
     const allowedTypes = ["bug", "feature_request"];
 
     if (!allowedTypes.includes(type)) {
-      return res.status(400).json({
+      return sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid type",
       });
@@ -26,7 +28,8 @@ const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
     const allowedStatus = ["open", "in_progress", "resolved"];
 
     if (status && !allowedStatus.includes(status)) {
-      return res.status(400).json({
+      return sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid status",
       });
@@ -41,17 +44,19 @@ const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
     };
 
     const result = await issuesService.createIssueIntoDB(issue);
-
-    res.status(201).json({
+    sendResponse(res, {
+      statusCode: 200,
       message: "Issue created successfully",
       success: true,
       data: result.rows[0],
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
-      message: "Failed to create issue",
+      message: `Failed to create issue`,
+      error,
     });
   }
 };
@@ -59,18 +64,19 @@ const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
 const getAllIssues = async (req: Request, res: Response) => {
   try {
     const allIssues = await issuesService.getAllIssues(req.query);
-
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       message: "All Issues are retrieved successfully",
       success: true,
       data: allIssues,
     });
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
-      message: "Failed to get all the issues",
+      message: `Failed to get all the issues`,
+      error,
     });
   }
 };
@@ -79,17 +85,19 @@ const getSingleIssue = async (req: Request, res: Response) => {
   try {
     const result = await issuesService.getSingleIssue(req.params);
 
-    res.status(200).json({
-      message: `Issues with id ${req.params.id} retrieved successfully`,
+    sendResponse(res, {
+      statusCode: 200,
+      message: "Issue retrived successfully",
       success: true,
       data: result,
     });
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: `Failed to get issue with id ${req.params.id} `,
+      error,
     });
   }
 };
@@ -98,17 +106,18 @@ const deleteSingleIssue = async (req: Request, res: Response) => {
   try {
     const result = await issuesService.deleteSingleIssue(req.params);
 
-    res.status(200).json({
-      success: true,
+    sendResponse(res, {
+      statusCode: 200,
       message: "Issue deleted successfully",
-      data: result,
+      success: true,
     });
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({
-      success: false,
+    sendResponse(res, {
+      statusCode: 500,
       message: `Failed to get issue with id ${req.params.id} `,
+      success: false,
+      error,
     });
   }
 };
@@ -120,18 +129,20 @@ const updateIssue = async (req: Request, res: Response) => {
     const body = req.body;
 
     const result = await issuesService.updateIssue({ id, user, body });
-
-    res.status(200).json({
-      success: true,
+    sendResponse(res, {
+      statusCode: 200,
       message: "Issue Updated successfully",
+      success: true,
       data: result,
     });
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: `Failed to update issue with id ${req.params.id} `,
+      error,
     });
   }
 };
