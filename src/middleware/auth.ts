@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import loginUser from "../utilities/getLoginUser.ts";
-import { config } from "../utilities/config.ts";
+import { config } from "../config/config.ts";
 
 const auth = (...roles: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {

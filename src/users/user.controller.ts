@@ -26,7 +26,8 @@ const createUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
   try {
     const { accessToken, jwtPayload } = await userService.userLogin(req.body);
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       success: true,
       message: "Login Successful",
       data: {
@@ -38,9 +39,11 @@ const loginUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: `Login failed `,
+      error: error,
     });
   }
 };

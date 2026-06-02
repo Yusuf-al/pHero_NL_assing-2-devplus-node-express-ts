@@ -20,3 +20,179 @@ IP        : ::1
 Success   : true
 Agent     : PostmanRuntime/7.53.0
 ----------------------------------------
+----------------------------------------  
+[30/5/2026, 11:37:13 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 20ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:38:53 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 121ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:39:55 pm]
+Status    : SUCCESS
+Method    : GET
+Route     : /api/issues
+Code      : 200
+Duration  : 35ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:42:41 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/issues
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:43:16 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/issues
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:44:12 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 21ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:44:25 pm]
+Status    : SUCCESS
+Method    : GET
+Route     : /api/issues
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:46:23 pm]
+Status    : SUCCESS
+Method    : PUT
+Route     : /api/issues/9
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:46:45 pm]
+Status    : SUCCESS
+Method    : PUT
+Route     : /api/issues/9
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:47:10 pm]
+Status    : SUCCESS
+Method    : PUT
+Route     : /api/issues/10
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:49:06 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:49:31 pm]
+Status    : SUCCESS
+Method    : DELETE
+Route     : /api/issues/8
+Code      : 200
+Duration  : 1ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:49:46 pm]
+Status    : SUCCESS
+Method    : DELETE
+Route     : /api/issues/10
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:50:08 pm]
+Status    : SUCCESS
+Method    : POST
+Route     : /api/auth/login
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:50:28 pm]
+Status    : SUCCESS
+Method    : DELETE
+Route     : /api/issues/8
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------
+----------------------------------------  
+[2/6/2026, 4:50:43 pm]
+Status    : SUCCESS
+Method    : DELETE
+Route     : /api/issues/10
+Code      : 200
+Duration  : 0ms
+IP        : ::1
+Success   : true
+Agent     : PostmanRuntime/7.53.0
+----------------------------------------

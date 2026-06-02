@@ -4,7 +4,7 @@ import { pool } from "../db/db.ts";
 import { Ilogin } from "../types/login.interface.ts";
 import jwt from "jsonwebtoken";
 import loginUser from "../utilities/getLoginUser.ts";
-import { config } from "../utilities/config.ts";
+import { config } from "../config/config.ts";
 
 const createUserintoDB = async (payload: IUser) => {
   const { name, password, role, email } = payload;
