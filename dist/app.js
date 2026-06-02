@@ -1,0 +1,12 @@
+import express from "express";
+import issueRoute from "./issues/issues.route.ts";
+import userRouter from "./users/user.route.ts";
+import logger from "./middleware/logger.ts";
+import globalErrorHandler from "./middleware/globalErrorHandler.ts";
+const app = express();
+app.use(express.json());
+app.use(logger);
+app.use("/api/auth/", userRouter);
+app.use("/api/issues", issueRoute);
+app.use(globalErrorHandler);
+export default app;
