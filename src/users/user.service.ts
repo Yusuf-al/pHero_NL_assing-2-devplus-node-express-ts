@@ -1,10 +1,10 @@
-import { IUser } from "./user.interface.ts";
+import { IUser } from "./user.interface";
 import bcrypt from "bcrypt";
-import { pool } from "../db/db.ts";
-import { Ilogin } from "../types/login.interface.ts";
+import { pool } from "../db/db";
+import { Ilogin } from "../types/login.interface";
 import jwt from "jsonwebtoken";
-import loginUser from "../utilities/getLoginUser.ts";
-import { config } from "../config/config.ts";
+import loginUser from "../utilities/getLoginUser";
+import { config } from "../config/config";
 
 const createUserintoDB = async (payload: IUser) => {
   const { name, password, role, email } = payload;

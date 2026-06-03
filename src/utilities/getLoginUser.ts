@@ -1,4 +1,4 @@
-import { pool } from "../db/db.ts";
+import { pool } from "../db/db";
 
 const loginUser = async (email: string) => {
   const userData = await pool.query(

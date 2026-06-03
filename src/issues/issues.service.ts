@@ -1,5 +1,5 @@
-import { pool } from "../db/db.ts";
-import { IIssues } from "./issues.interface.ts";
+import { pool } from "../db/db";
+import { IIssues } from "./issues.interface";
 
 const createIssueIntoDB = async (payload: IIssues) => {
   const { title, description, type, reporter_id, status } = payload;
@@ -95,13 +95,14 @@ const updateIssue = async (payload: any) => {
 
   const issue = rows[0];
 
-  const isMaintainerOwner =
-    user.role === "maintainer" &&
-    issue.status === "open" &&
-    issue.reporter_id === user.id;
-  const isContributor = user.role === "contributor";
+  const isMaintainer = user.role === "maintainer";
 
-  if (!isMaintainerOwner && !isContributor) {
+  const isContributorAllowed =
+    user.role === "contributor" &&
+    issue.reporter_id === user.id &&
+    issue.status === "open";
+
+  if (!isContributorAllowed && !isMaintainer) {
     throw new Error(
       "Unauthorized: You do not have permission to update this issue",
     );

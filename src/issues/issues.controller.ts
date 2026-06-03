@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { issuesService } from "./issues.service.ts";
-import { IIssues } from "./issues.interface.ts";
-import sendResponse from "../utilities/sendResponse.ts";
+import { issuesService } from "./issues.service";
+import { IIssues } from "./issues.interface";
+import sendResponse from "../utilities/sendResponse";
 
 const createIssue = async (req: Request<{}, {}, IIssues>, res: Response) => {
   try {
