@@ -57,18 +57,18 @@ Devpulse API is a RESTful backend application built with Node.js, Express, TypeS
 * dotenv
 
 
-## API Endpoints
+# API Endpoints
 
-### Authentication &  Register User
-# POST /api/auth/signup
-# POST /api/auth/login
+## Authentication &  Register User
+#### POST /api/auth/signup
+#### POST /api/auth/login
 
-#### Create Issue
-# POST /api/issues
+## Create Issue
+#### POST /api/issues
 
 
-#### Get All Issues
-# GET /api/issues
+## Get All Issues
+#### GET /api/issues
 
 
 Query Parameters:
@@ -87,19 +87,19 @@ Query Parameters:
 
 ---
 
-#### Get Single Issue
+## Get Single Issue
 
-# GET /api/issues/:id
+#### GET /api/issues/:id
 
 
 
-#### Update Issue
+## Update Issue
 
-# PUT /api/issues/:id
+#### PUT /api/issues/:id
 
-#### Delete Issue
+## Delete Issue
 
-# DELETE /api/issues/:id
+#### DELETE /api/issues/:id
 
 Authorization Rules:
 
